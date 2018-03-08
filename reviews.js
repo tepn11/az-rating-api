@@ -9,6 +9,8 @@ var reviewSchema = new mongoose.Schema({
   url: String,
   price: String,
   ts: Date,
+  ts2: Date,
+  ts3: Date,
   overall_rating: String,
   overall_rating2: String,
   overall_rating3: String

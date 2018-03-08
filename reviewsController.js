@@ -16,7 +16,28 @@ router.get('/asin/:asin', function (req, res) {
   var query = Reviews.find({'asin':req.params.asin}).sort('-ts').limit(5);
   query.exec(function (err, reviews) {
     if (err) return res.status(500).send("There was a problem finding the asin.");
-    res.status(200).send(reviews);
+
+    let consolidatedReview;
+    reviews.forEach(rev => {
+      if(consolidatedReview){
+        if(consolidatedReview.overall_rating2 && consolidatedReview.review_count2){
+          if(consolidatedReview.overall_rating3 && consolidatedReview.review_count3){
+            return;
+          }
+          consolidatedReview.overall_rating3 = rev.overall_rating;
+          consolidatedReview.review_count3 = rev.review_count;
+          consolidatedReview.ts3 = rev.ts;
+          return;
+        }
+        consolidatedReview.overall_rating2 = rev.overall_rating;
+        consolidatedReview.review_count2 = rev.review_count;
+        consolidatedReview.ts2 = rev.ts;
+        return;
+      }
+      consolidatedReview = rev;
+    });
+
+    res.status(200).send(consolidatedReview);
   });
 });
 
@@ -90,8 +111,8 @@ router.get('/all', function (req, res) {
         tmpReviewObj[rev.asin].review_count2 = rev.review_count;
         return;
       }
-      tmpReviewObj[rev.asin] = rev
-    })
+      tmpReviewObj[rev.asin] = rev;
+    });
     console.log(tmpReviewObj);
     var newReviewsArr = Object.values(tmpReviewObj);
     res.status(200).send(newReviewsArr);
