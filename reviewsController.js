@@ -16,28 +16,31 @@ router.get('/asin/:asin', function (req, res) {
   var query = Reviews.find({'asin':req.params.asin}).sort('-ts').limit(5);
   query.exec(function (err, reviews) {
     if (err) return res.status(500).send("There was a problem finding the asin.");
-
-    let consolidatedReview;
-    reviews.forEach(rev => {
-      if(consolidatedReview){
-        if(consolidatedReview.overall_rating2 && consolidatedReview.review_count2){
-          if(consolidatedReview.overall_rating3 && consolidatedReview.review_count3){
+    if (reviews.length > 0){
+      let consolidatedReview;
+      reviews.forEach(rev => {
+        if(consolidatedReview){
+          if(consolidatedReview.overall_rating2 && consolidatedReview.review_count2){
+            if(consolidatedReview.overall_rating3 && consolidatedReview.review_count3){
+              return;
+            }
+            consolidatedReview.overall_rating3 = rev.overall_rating;
+            consolidatedReview.review_count3 = rev.review_count;
+            consolidatedReview.ts3 = rev.ts;
             return;
           }
-          consolidatedReview.overall_rating3 = rev.overall_rating;
-          consolidatedReview.review_count3 = rev.review_count;
-          consolidatedReview.ts3 = rev.ts;
+          consolidatedReview.overall_rating2 = rev.overall_rating;
+          consolidatedReview.review_count2 = rev.review_count;
+          consolidatedReview.ts2 = rev.ts;
           return;
         }
-        consolidatedReview.overall_rating2 = rev.overall_rating;
-        consolidatedReview.review_count2 = rev.review_count;
-        consolidatedReview.ts2 = rev.ts;
-        return;
-      }
-      consolidatedReview = rev;
-    });
+        consolidatedReview = rev;
+      });
 
-    res.status(200).send(consolidatedReview);
+      res.status(200).send(consolidatedReview);
+    } else {
+      res.status(204).send();
+    }
   });
 });
 
@@ -47,7 +50,7 @@ router.get('/all', function (req, res) {
     "B07373WJ5T",
 
     // "B072JBC1GM",
-    // "B07144XG5Q",
+    // "B072JBC1GM",
     // "B072HMPPH2",
     // "B01FRGGNCU",
     // "B01NBRB8B6",
