@@ -22,6 +22,18 @@ router.get('/asin/:asin', function (req, res) {
         if(consolidatedReview){
           if(consolidatedReview.overall_rating2 && consolidatedReview.review_count2){
             if(consolidatedReview.overall_rating3 && consolidatedReview.review_count3){
+              if(consolidatedReview.overall_rating4 && consolidatedReview.review_count4){
+                if(consolidatedReview.overall_rating5 && consolidatedReview.review_count5){
+                  return;
+                }
+                consolidatedReview.overall_rating5 = rev.overall_rating;
+                consolidatedReview.review_count5 = rev.review_count;
+                consolidatedReview.ts5 = rev.ts;
+                return;
+              }
+              consolidatedReview.overall_rating4 = rev.overall_rating;
+              consolidatedReview.review_count4 = rev.review_count;
+              consolidatedReview.ts4 = rev.ts;
               return;
             }
             consolidatedReview.overall_rating3 = rev.overall_rating;
