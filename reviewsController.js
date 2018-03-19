@@ -28,24 +28,25 @@ router.get('/asin/:asin', function (req, res) {
                 }
                 consolidatedReview.overall_rating5 = rev.overall_rating;
                 consolidatedReview.review_count5 = rev.review_count;
-                consolidatedReview.ts5 = rev.ts;
+                consolidatedReview.ts5 = (new Date(rev.ts)).toLocaleDateString();
                 return;
               }
               consolidatedReview.overall_rating4 = rev.overall_rating;
               consolidatedReview.review_count4 = rev.review_count;
-              consolidatedReview.ts4 = rev.ts;
+              consolidatedReview.ts4 = (new Date(rev.ts)).toLocaleDateString();
               return;
             }
             consolidatedReview.overall_rating3 = rev.overall_rating;
             consolidatedReview.review_count3 = rev.review_count;
-            consolidatedReview.ts3 = rev.ts;
+            consolidatedReview.ts3 = (new Date(rev.ts)).toLocaleDateString();
             return;
           }
           consolidatedReview.overall_rating2 = rev.overall_rating;
           consolidatedReview.review_count2 = rev.review_count;
-          consolidatedReview.ts2 = rev.ts;
+          consolidatedReview.ts2 = (new Date(rev.ts)).toLocaleDateString();
           return;
         }
+        rev.ts = (new Date(rev.ts)).toLocaleDateString();
         consolidatedReview = rev;
       });
 
